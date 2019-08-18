@@ -1,0 +1,26 @@
+---
+    - name: Install MySQl Database
+      sudo: yes
+      apt: name={{ item }} state=installed
+      with_items:
+        - mysql-server
+        - mysql-client
+
+    - name: Start MySQl Service
+      sudo: yes
+      service:
+        name: mysql
+        state: started
+        enabled: yes
+
+    - name: Create Application DataBase
+      sudo: yes
+      mysql_db: name= {{ db_name }} state=present
+
+    - name: Create Database User
+      sudo: yes
+      mysql_user:
+        name: "{{ db_usr }}"
+        password: "{{ db_pass }}"
+        priv: '*.*:ALL'
+        state: present
